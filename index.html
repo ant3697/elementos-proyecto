@@ -148,19 +148,19 @@
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
         /* Estilos específicos para la Matriz de PRL */
-        .riesgo-trivial { background-color: #ddee99; color: #3f6212; }
-        .riesgo-tolerable { background-color: #fef08a; color: #854d0e; }
-        .riesgo-moderado { background-color: #fbd38d; color: #9a3412; }
-        .riesgo-alto { background-color: #f87171; color: #991b1b; }
-        .riesgo-muy-alto { background-color: #dc2626; color: white; }
+        .riesgo-trivial { background-color: #ddee99 !important; color: #3f6212 !important; }
+        .riesgo-tolerable { background-color: #fef08a !important; color: #854d0e !important; }
+        .riesgo-moderado { background-color: #fbd38d !important; color: #9a3412 !important; }
+        .riesgo-alto { background-color: #f87171 !important; color: #991b1b !important; }
+        .riesgo-muy-alto { background-color: #dc2626 !important; color: white !important; }
         
         .interactive-matrix-grid {
             display: grid;
             grid-template-columns: auto auto repeat(3, 1fr);
             grid-template-rows: auto auto repeat(3, 1fr);
             gap: 1px;
-            background-color: #334155;
-            border: 1px solid #334155;
+            background-color: var(--border-default);
+            border: 1px solid var(--border-default);
             border-radius: 0.5rem;
             overflow: hidden;
             position: relative;
@@ -176,10 +176,11 @@
             font-weight: 600;
             position: relative;
             transition: filter 0.2s;
+            background-color: var(--bg-surface);
         }
         .matrix-header {
-            background-color: rgba(30, 41, 59, 0.9);
-            color: #94a3b8;
+            background-color: var(--bg-alt) !important;
+            color: var(--text-primary) !important;
         }
         .prob-header { display: flex; align-items: center; justify-content: center; }
         .training-active .interactive-matrix-grid [data-prob] { cursor: pointer; }
@@ -309,71 +310,77 @@
         </section>
 
         <!-- SECCIÓN CARGAS TÉRMICAS -->
-        <section id="thermal" class="tab-content glass-card p-8 rounded-3xl">
+        <section id="thermal" class="tab-content glass-card p-8 rounded-3xl bg-white/80 dark:bg-slate-900/80">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
                 <div>
-                    <h2 class="text-2xl font-bold text-white tracking-tight">Balance Técnico de Cargas Térmicas</h2>
-                    <p class="text-slate-400 text-sm mt-1">Diferenciación de Sensible/Latente y Verano/Invierno con elementos normalizados. <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-widest ml-2 bg-emerald-900/30 px-2 py-0.5 rounded-full border border-emerald-700/50">CTE DB-HE / RITE (RD 1027/2007)</span></p>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white tracking-tight">Balance Técnico de Cargas Térmicas</h2>
+                    <p class="text-gray-600 dark:text-slate-400 text-sm mt-1">Diferenciación de Sensible/Latente y Verano/Invierno con elementos normalizados. <span class="text-emerald-700 dark:text-emerald-400 font-bold text-[10px] uppercase tracking-widest ml-2 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-700/50">CTE DB-HE / RITE (RD 1027/2007)</span></p>
                 </div>
                 <div class="flex gap-3 no-print flex-wrap">
+                    <button onclick="toggleAllThermalSections()" data-no-history="true" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-lg">👁️ Colapsar / Expandir Todo</button>
                     <button onclick="resetThermal()" class="bg-red-600 hover:bg-red-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg shadow-red-600/20">🗑️ Limpiar Tabla</button>
                     <button onclick="copyToWord('thermal-table')" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg shadow-blue-600/20">Copiar para Word</button>
                 </div>
             </div>
 
-            <div class="mb-8 bg-slate-800/60 border border-blue-500/30 rounded-2xl p-5 shadow-lg relative overflow-hidden group no-print">
+            <div class="mb-8 bg-white dark:bg-slate-800/60 border border-blue-200 dark:border-blue-500/30 rounded-2xl p-5 shadow-lg relative overflow-hidden group no-print">
                 <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-xl">🎓</span>
-                    <h3 class="text-blue-400 font-bold text-sm uppercase tracking-widest">Panel Didáctico: Ecuaciones Normativas (CTE / RITE)</h3>
+                <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleVisibility('thermal-panel-content', this)">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🎓</span>
+                        <h3 class="text-blue-700 dark:text-blue-400 font-bold text-sm uppercase tracking-widest">Panel Didáctico: Ecuaciones Normativas (CTE / RITE)</h3>
+                    </div>
+                    <button class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-transform duration-200 transform rotate-180" id="btn-toggle-thermal-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
-                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Transmisión (Invierno)</p>
-                        <div class="font-mono text-sm text-emerald-400 mb-2 bg-slate-950 p-2 rounded text-center border border-slate-800">Q = U · A · ΔT</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed">Cálculo estático para el escenario crítico nocturno. El coeficiente <strong class="text-slate-300">U</strong> debe acotarse a límites de <strong class="text-emerald-400">CTE DB-HE1</strong>.</p>
+                <div id="thermal-panel-content" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 transition-all duration-300">
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors">
+                        <p class="text-[10px] text-gray-500 dark:text-slate-400 uppercase font-bold mb-1">Transmisión (Invierno)</p>
+                        <div class="font-mono text-sm text-emerald-700 dark:text-emerald-400 mb-2 bg-gray-200 dark:bg-slate-950 p-2 rounded text-center border border-gray-300 dark:border-slate-800">Q = U · A · ΔT</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed">Cálculo estático para el escenario crítico nocturno. El coeficiente <strong class="text-gray-800 dark:text-slate-300">U</strong> debe acotarse a límites de <strong class="text-emerald-700 dark:text-emerald-400">CTE DB-HE1</strong>.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
-                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Transmisión (Verano)</p>
-                        <div class="font-mono text-sm text-amber-400 mb-2 bg-slate-950 p-2 rounded text-center border border-slate-800">Q = U · A · CLTD</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed">Cálculo dinámico. El <strong class="text-slate-300">CLTD</strong> corrige el salto térmico por absorción solar e inercia térmica de muros.</p>
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors">
+                        <p class="text-[10px] text-gray-500 dark:text-slate-400 uppercase font-bold mb-1">Transmisión (Verano)</p>
+                        <div class="font-mono text-sm text-amber-700 dark:text-amber-400 mb-2 bg-gray-200 dark:bg-slate-950 p-2 rounded text-center border border-gray-300 dark:border-slate-800">Q = U · A · CLTD</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed">Cálculo dinámico. El <strong class="text-gray-800 dark:text-slate-300">CLTD</strong> corrige el salto térmico por absorción solar e inercia térmica de muros.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
-                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Ventilación Sensible</p>
-                        <div class="font-mono text-sm text-emerald-400 mb-2 bg-slate-950 p-2 rounded text-center border border-slate-800">Q = V · 0.34 · ΔT</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed"><strong class="text-slate-300">V</strong> es caudal exigido según <strong class="text-emerald-400">RITE (calidad IDA) o CTE DB-HS3</strong>.</p>
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors">
+                        <p class="text-[10px] text-gray-500 dark:text-slate-400 uppercase font-bold mb-1">Ventilación Sensible</p>
+                        <div class="font-mono text-sm text-emerald-700 dark:text-emerald-400 mb-2 bg-gray-200 dark:bg-slate-950 p-2 rounded text-center border border-gray-300 dark:border-slate-800">Q = V · 0.34 · ΔT</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed"><strong class="text-gray-800 dark:text-slate-300">V</strong> es caudal exigido según <strong class="text-emerald-700 dark:text-emerald-400">RITE (calidad IDA) o CTE DB-HS3</strong>.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
-                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Radiación Solar Huecos</p>
-                        <div class="font-mono text-sm text-amber-400 mb-2 bg-slate-950 p-2 rounded text-center border border-slate-800">Q = S · R · F</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed"><strong class="text-slate-300">S</strong>: Superficie. <strong class="text-slate-300">R</strong>: Radiación max orientación. <strong class="text-slate-300">F</strong>: Factor solar de atenuación exigido por <strong class="text-emerald-400">CTE DB-HE</strong>.</p>
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors">
+                        <p class="text-[10px] text-gray-500 dark:text-slate-400 uppercase font-bold mb-1">Radiación Solar Huecos</p>
+                        <div class="font-mono text-sm text-amber-700 dark:text-amber-400 mb-2 bg-gray-200 dark:bg-slate-950 p-2 rounded text-center border border-gray-300 dark:border-slate-800">Q = S · R · F</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed"><strong class="text-gray-800 dark:text-slate-300">S</strong>: Superficie. <strong class="text-gray-800 dark:text-slate-300">R</strong>: Radiación max orientación. <strong class="text-gray-800 dark:text-slate-300">F</strong>: Factor solar de atenuación exigido por <strong class="text-emerald-700 dark:text-emerald-400">CTE DB-HE</strong>.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-blue-500/50 transition-colors">
-                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Psicrometría (FCS)</p>
-                        <div class="font-mono text-sm text-blue-400 mb-2 bg-slate-950 p-2 rounded text-center border border-slate-800">FCS = Qs / (Qs+Ql)</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed">El Factor de Calor Sensible dicta la recta de proceso en el <strong class="text-slate-300">Ábaco Psicrométrico</strong>.</p>
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors">
+                        <p class="text-[10px] text-gray-500 dark:text-slate-400 uppercase font-bold mb-1">Psicrometría (FCS)</p>
+                        <div class="font-mono text-sm text-blue-700 dark:text-blue-400 mb-2 bg-gray-200 dark:bg-slate-950 p-2 rounded text-center border border-gray-300 dark:border-slate-800">FCS = Qs / (Qs+Ql)</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed">El Factor de Calor Sensible dicta la recta de proceso en el <strong class="text-gray-800 dark:text-slate-300">Ábaco Psicrométrico</strong>.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-cyan-500/50 transition-colors shadow-[0_0_10px_rgba(6,182,212,0.05)] relative overflow-hidden">
-                        <p class="text-[10px] text-cyan-400 uppercase font-bold mb-1">Caudal Impulsión (Dimens.)</p>
-                        <div class="font-mono text-[9px] text-cyan-300 mb-2 bg-slate-950 p-1.5 rounded text-center border border-cyan-900/50 tracking-tighter">V = Qs / [0.34·(T_loc-T_imp)]</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed">Caudal <strong class="text-slate-300">V (m³/h)</strong> necesario para abatir la carga sensible total <strong class="text-slate-300">Qs</strong>.</p>
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-cyan-400 dark:hover:border-cyan-500/50 transition-colors shadow-[0_0_10px_rgba(6,182,212,0.05)] relative overflow-hidden">
+                        <p class="text-[10px] text-cyan-700 dark:text-cyan-400 uppercase font-bold mb-1">Caudal Impulsión (Dimens.)</p>
+                        <div class="font-mono text-[9px] text-cyan-800 dark:text-cyan-300 mb-2 bg-gray-200 dark:bg-slate-950 p-1.5 rounded text-center border border-gray-300 dark:border-cyan-900/50 tracking-tighter">V = Qs / [0.34·(T_loc-T_imp)]</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed">Caudal <strong class="text-gray-800 dark:text-slate-300">V (m³/h)</strong> necesario para abatir la carga sensible total <strong class="text-gray-800 dark:text-slate-300">Qs</strong>.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-emerald-500/50 transition-colors shadow-[0_0_10px_rgba(16,185,129,0.05)] relative overflow-hidden">
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors shadow-[0_0_10px_rgba(16,185,129,0.05)] relative overflow-hidden">
                         <div class="absolute -right-2 -top-2 bg-emerald-600 text-white text-[8px] font-bold px-4 py-1 rotate-45">CTE</div>
-                        <p class="text-[10px] text-emerald-400 uppercase font-bold mb-1">Aerotermia Renovable</p>
-                        <div class="font-mono text-[9px] text-emerald-300 mb-2 bg-slate-950 p-1.5 rounded text-center border border-emerald-900/50 tracking-tighter">E_res = Q_usable · (1 - 1/SPF)</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed">La máquina aporta energía renovable gratuita si su rendimiento <strong class="text-slate-300">SPF > 2.5</strong>.</p>
+                        <p class="text-[10px] text-emerald-700 dark:text-emerald-400 uppercase font-bold mb-1">Aerotermia Renovable</p>
+                        <div class="font-mono text-[9px] text-emerald-800 dark:text-emerald-300 mb-2 bg-gray-200 dark:bg-slate-950 p-1.5 rounded text-center border border-gray-300 dark:border-emerald-900/50 tracking-tighter">E_res = Q_usable · (1 - 1/SPF)</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed">La máquina aporta energía renovable gratuita si su rendimiento <strong class="text-gray-800 dark:text-slate-300">SPF > 2.5</strong>.</p>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 hover:border-emerald-500/50 transition-colors shadow-[0_0_10px_rgba(16,185,129,0.05)] relative overflow-hidden">
+                    <div class="bg-gray-50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700/50 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors shadow-[0_0_10px_rgba(16,185,129,0.05)] relative overflow-hidden">
                         <div class="absolute -right-2 -top-2 bg-emerald-600 text-white text-[8px] font-bold px-4 py-1 rotate-45">RITE</div>
-                        <p class="text-[10px] text-emerald-400 uppercase font-bold mb-1">Eficiencia (SCOP / SPF)</p>
-                        <div class="font-mono text-[9px] text-emerald-300 mb-2 bg-slate-950 p-1.5 rounded text-center border border-emerald-900/50 tracking-tighter">SCOP = Q_térmico / W_eléctrico</div>
-                        <p class="text-[9px] text-slate-500 leading-relaxed">Rendimiento estacional. <strong class="text-emerald-400">A mayor SCOP, mayor ahorro</strong>.</p>
+                        <p class="text-[10px] text-emerald-700 dark:text-emerald-400 uppercase font-bold mb-1">Eficiencia (SCOP / SPF)</p>
+                        <div class="font-mono text-[9px] text-emerald-800 dark:text-emerald-300 mb-2 bg-gray-200 dark:bg-slate-950 p-1.5 rounded text-center border border-gray-300 dark:border-emerald-900/50 tracking-tighter">SCOP = Q_térmico / W_eléctrico</div>
+                        <p class="text-[9px] text-gray-600 dark:text-slate-500 leading-relaxed">Rendimiento estacional. <strong class="text-emerald-700 dark:text-emerald-400">A mayor SCOP, mayor ahorro</strong>.</p>
                     </div>
                 </div>
             </div>
             
-            <div class="overflow-x-auto overflow-y-auto max-h-[60vh] rounded-2xl border border-slate-800 shadow-2xl relative">
+            <div class="overflow-x-auto overflow-y-auto max-h-[60vh] rounded-2xl border border-gray-300 dark:border-slate-800 shadow-2xl relative bg-white dark:bg-transparent">
                 <table id="thermal-table" class="w-full border-collapse">
                     <thead class="bg-slate-900/95 text-[10px] sticky top-0 z-20 backdrop-blur-md shadow-sm">
                         <tr>
@@ -389,58 +396,86 @@
                         </tr>
                     </thead>
                     <tbody id="thermal-body">
-                        <tr class="bg-yellow-500/10 border-y border-yellow-500/30">
-                            <td colspan="9" class="p-2 text-center text-[11px] font-black uppercase text-yellow-500 tracking-[0.2em]">▼ Cargas Térmicas Exteriores ▼</td>
+                        <tr class="bg-yellow-100 dark:bg-yellow-500/10 border-y border-yellow-300 dark:border-yellow-500/30">
+                            <td colspan="9" class="p-2 text-center text-[11px] font-black uppercase text-yellow-700 dark:text-yellow-500 tracking-[0.2em]">▼ Cargas Térmicas Exteriores ▼</td>
                         </tr>
                         
-                        <tr class="bg-slate-800/80"><td colspan="9" class="p-3 text-[10px] font-black uppercase text-yellow-400 tracking-widest border-b border-slate-700 flex justify-between items-center flex-wrap gap-2">
-                            <span>1. Transmisión opacos y Puentes Térmicos <span class="text-[8px] text-emerald-400/80 lowercase italic font-normal ml-2 tracking-normal">(CTE DB-HE1)</span></span>
-                            <div class="flex gap-1 no-print flex-wrap">
-                                <button onclick="addCommonThermal('opacos', 'Fachada Doble Hoja', 0.55, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Fachada</button>
-                                <button onclick="addCommonThermal('opacos', 'Suelo s/Terreno', 0.40, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Suelo</button>
-                                <button onclick="addCommonThermal('opacos', 'Cubierta', 0.35, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Cubierta</button>
-                                <button onclick="addCommonThermal('opacos', 'Puente Térmico', 1.20, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded border border-yellow-500/50 hover:bg-yellow-600 transition-all">+ P. Térmicos</button>
-                                <button onclick="addThermalSpecificRow('opacos')" class="text-[8px] bg-slate-600 px-2 py-0.5 rounded hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
-                            </div>
-                        </td></tr>
-                        <tbody id="thermal-opacos-body"></tbody>
+                        <tr class="bg-gray-100 dark:bg-slate-800/80 cursor-pointer" onclick="toggleTbody('thermal-opacos-body', this)">
+                            <td colspan="9" class="p-3 text-[10px] font-black uppercase text-yellow-700 dark:text-yellow-400 tracking-widest border-b border-gray-300 dark:border-slate-700">
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                        <span>1. Transmisión opacos y Puentes Térmicos <span class="text-[8px] text-emerald-600 dark:text-emerald-400/80 lowercase italic font-normal ml-2 tracking-normal">(CTE DB-HE1)</span></span>
+                                    </div>
+                                    <div class="flex gap-1 no-print flex-wrap" onclick="event.stopPropagation()">
+                                        <button onclick="addCommonThermal('opacos', 'Fachada Doble Hoja', 0.55, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Fachada</button>
+                                        <button onclick="addCommonThermal('opacos', 'Suelo s/Terreno', 0.40, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Suelo</button>
+                                        <button onclick="addCommonThermal('opacos', 'Cubierta', 0.35, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Cubierta</button>
+                                        <button onclick="addCommonThermal('opacos', 'Puente Térmico', 1.20, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded border border-gray-400 dark:border-yellow-500/50 hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ P. Térmicos</button>
+                                        <button onclick="addThermalSpecificRow('opacos', '', 0, 'invierno', 'sensible', true)" class="text-[8px] bg-gray-400 dark:bg-slate-600 text-white dark:text-gray-200 px-2 py-0.5 rounded hover:bg-gray-500 dark:hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tbody id="thermal-opacos-body" class="hidden"></tbody>
 
-                        <tr class="bg-slate-800/80"><td colspan="9" class="p-3 text-[10px] font-black uppercase text-yellow-400 tracking-widest border-b border-slate-700 flex justify-between items-center flex-wrap gap-2">
-                            <span>2. Transmisión semitransparentes y Radiación <span class="text-[8px] text-emerald-400/80 lowercase italic font-normal ml-2 tracking-normal">(CTE DB-HE1)</span></span>
-                            <div class="flex gap-1 no-print flex-wrap">
-                                <button onclick="addCommonThermal('huecos', 'Ventana Climalit', 2.80, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Climalit</button>
-                                <button onclick="addCommonThermal('huecos', 'Radiación Vidrio', 450, 'verano', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Radiación</button>
-                                <button onclick="addCommonThermal('huecos', 'Vidrio Doble', 2.80, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Doble</button>
-                                <button onclick="addThermalSpecificRow('huecos')" class="text-[8px] bg-slate-600 px-2 py-0.5 rounded hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
-                            </div>
-                        </td></tr>
-                        <tbody id="thermal-huecos-body"></tbody>
+                        <tr class="bg-gray-100 dark:bg-slate-800/80 cursor-pointer" onclick="toggleTbody('thermal-huecos-body', this)">
+                            <td colspan="9" class="p-3 text-[10px] font-black uppercase text-yellow-700 dark:text-yellow-400 tracking-widest border-b border-gray-300 dark:border-slate-700">
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                        <span>2. Transmisión semitransparentes y Radiación <span class="text-[8px] text-emerald-600 dark:text-emerald-400/80 lowercase italic font-normal ml-2 tracking-normal">(CTE DB-HE1)</span></span>
+                                    </div>
+                                    <div class="flex gap-1 no-print flex-wrap" onclick="event.stopPropagation()">
+                                        <button onclick="addCommonThermal('huecos', 'Ventana Climalit', 2.80, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Climalit</button>
+                                        <button onclick="addCommonThermal('huecos', 'Radiación Vidrio', 450, 'verano', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Radiación</button>
+                                        <button onclick="addCommonThermal('huecos', 'Vidrio Doble', 2.80, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Doble</button>
+                                        <button onclick="addThermalSpecificRow('huecos', '', 0, 'invierno', 'sensible', true)" class="text-[8px] bg-gray-400 dark:bg-slate-600 text-white dark:text-gray-200 px-2 py-0.5 rounded hover:bg-gray-500 dark:hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tbody id="thermal-huecos-body" class="hidden"></tbody>
 
-                        <tr class="bg-slate-800/80"><td colspan="9" class="p-3 text-[10px] font-black uppercase text-yellow-400 tracking-widest border-b border-slate-700 flex justify-between items-center flex-wrap gap-2">
-                            <span>3. Ventilación e Infiltración <span class="text-[8px] text-emerald-400/80 lowercase italic font-normal ml-2 tracking-normal">(RITE IDA / CTE DB-HS3)</span></span>
-                            <div class="flex gap-1 no-print flex-wrap">
-                                <button onclick="addCommonThermal('ventilacion', 'Caudal RITE (IDA 2)', 0.34, 'invierno', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Sensible</button>
-                                <button onclick="addCommonThermal('ventilacion', 'Infiltración Latente', 0.12, 'verano', 'latente')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-yellow-600 transition-all">+ Latente</button>
-                                <button onclick="addThermalSpecificRow('ventilacion')" class="text-[8px] bg-slate-600 px-2 py-0.5 rounded hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
-                            </div>
-                        </td></tr>
-                        <tbody id="thermal-ventilacion-body"></tbody>
+                        <tr class="bg-gray-100 dark:bg-slate-800/80 cursor-pointer" onclick="toggleTbody('thermal-ventilacion-body', this)">
+                            <td colspan="9" class="p-3 text-[10px] font-black uppercase text-yellow-700 dark:text-yellow-400 tracking-widest border-b border-gray-300 dark:border-slate-700">
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                        <span>3. Ventilación e Infiltración <span class="text-[8px] text-emerald-600 dark:text-emerald-400/80 lowercase italic font-normal ml-2 tracking-normal">(RITE IDA / CTE DB-HS3)</span></span>
+                                    </div>
+                                    <div class="flex gap-1 no-print flex-wrap" onclick="event.stopPropagation()">
+                                        <button onclick="addCommonThermal('ventilacion', 'Caudal RITE (IDA 2)', 0.34, 'invierno', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Sensible</button>
+                                        <button onclick="addCommonThermal('ventilacion', 'Infiltración Latente', 0.12, 'verano', 'latente')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-all">+ Latente</button>
+                                        <button onclick="addThermalSpecificRow('ventilacion', '', 0, 'invierno', 'sensible', true)" class="text-[8px] bg-gray-400 dark:bg-slate-600 text-white dark:text-gray-200 px-2 py-0.5 rounded hover:bg-gray-500 dark:hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tbody id="thermal-ventilacion-body" class="hidden"></tbody>
 
-                        <tr class="bg-orange-500/10 border-y border-orange-500/30">
-                            <td colspan="9" class="p-2 text-center text-[11px] font-black uppercase text-orange-500 tracking-[0.2em]">▼ Cargas Térmicas Interiores ▼</td>
+                        <tr class="bg-orange-100 dark:bg-orange-500/10 border-y border-orange-300 dark:border-orange-500/30">
+                            <td colspan="9" class="p-2 text-center text-[11px] font-black uppercase text-orange-700 dark:text-orange-500 tracking-[0.2em]">▼ Cargas Térmicas Interiores ▼</td>
                         </tr>
 
-                        <tr class="bg-slate-800/80"><td colspan="9" class="p-3 text-[10px] font-black uppercase text-orange-400 tracking-widest border-b border-slate-700 flex justify-between items-center flex-wrap gap-2">
-                            <span>4. Ocupantes, Iluminación, Equipos</span>
-                            <div class="flex gap-1 no-print flex-wrap">
-                                <button onclick="addCommonThermal('ganancias', 'Ocupación Sensible (75W/p)', 75, 'verano', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-orange-600 transition-all">+ Ocup. Sens.</button>
-                                <button onclick="addCommonThermal('ganancias', 'Ocupación Latente (55W/p)', 55, 'verano', 'latente')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-orange-600 transition-all">+ Ocup. Lat.</button>
-                                <button onclick="addCommonThermal('ganancias', 'Iluminación LED (15W/m²)', 15, 'verano', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-orange-600 transition-all">+ Ilum. LED</button>
-                                <button onclick="addCommonThermal('ganancias', 'Equipos/Oficina (25W/m²)', 25, 'verano', 'sensible')" class="text-[8px] bg-slate-700 px-2 py-0.5 rounded hover:bg-orange-600 transition-all">+ Equipos</button>
-                                <button onclick="addThermalSpecificRow('ganancias')" class="text-[8px] bg-slate-600 px-2 py-0.5 rounded hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
-                            </div>
-                        </td></tr>
-                        <tbody id="thermal-ganancias-body"></tbody>
+                        <tr class="bg-gray-100 dark:bg-slate-800/80 cursor-pointer" onclick="toggleTbody('thermal-ganancias-body', this)">
+                            <td colspan="9" class="p-3 text-[10px] font-black uppercase text-orange-700 dark:text-orange-400 tracking-widest border-b border-gray-300 dark:border-slate-700">
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                        <span>4. Ocupantes, Iluminación, Equipos</span>
+                                    </div>
+                                    <div class="flex gap-1 no-print flex-wrap" onclick="event.stopPropagation()">
+                                        <button onclick="addCommonThermal('ganancias', 'Ocupación Sensible (75W/p)', 75, 'verano', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-orange-400 dark:hover:bg-orange-600 transition-all">+ Ocup. Sens.</button>
+                                        <button onclick="addCommonThermal('ganancias', 'Ocupación Latente (55W/p)', 55, 'verano', 'latente')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-orange-400 dark:hover:bg-orange-600 transition-all">+ Ocup. Lat.</button>
+                                        <button onclick="addCommonThermal('ganancias', 'Iluminación LED (15W/m²)', 15, 'verano', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-orange-400 dark:hover:bg-orange-600 transition-all">+ Ilum. LED</button>
+                                        <button onclick="addCommonThermal('ganancias', 'Equipos/Oficina (25W/m²)', 25, 'verano', 'sensible')" class="text-[8px] bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded hover:bg-orange-400 dark:hover:bg-orange-600 transition-all">+ Equipos</button>
+                                        <button onclick="addThermalSpecificRow('ganancias', '', 0, 'verano', 'sensible', true)" class="text-[8px] bg-gray-400 dark:bg-slate-600 text-white dark:text-gray-200 px-2 py-0.5 rounded hover:bg-gray-500 dark:hover:bg-slate-500 transition-all tracking-tighter">✎ Libre</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tbody id="thermal-ganancias-body" class="hidden"></tbody>
                     </tbody>
                     <tfoot class="border-t-2 border-slate-700 text-[10px] sticky bottom-0 z-20 bg-slate-900/95 backdrop-blur-md shadow-md">
                         <tr class="bg-slate-900/50">
@@ -981,67 +1016,69 @@
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
                 <div class="flex flex-col gap-6">
-                    <div class="bg-slate-800/40 p-5 rounded-2xl border border-slate-700">
-                        <label for="scenario-select" class="block text-[10px] uppercase font-bold text-slate-400 mb-2 tracking-widest">Escenario de Accidente / Riesgo:</label>
-                        <div class="flex items-center gap-2">
-                            <select id="scenario-select" onchange="saveStateToHistory()" class="block w-full bg-slate-900 border border-slate-700 focus:border-blue-500 outline-none p-3 text-sm rounded-xl text-slate-200 font-semibold transition-colors"></select>
-                            <button id="random-scenario-btn" title="Escenario aleatorio" class="flex-shrink-0 p-3 rounded-xl bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-blue-500 transition-colors duration-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M16 8h.01"></path><path d="M12 12h.01"></path><path d="M8 16h.01"></path><path d="M8 8h.01"></path><path d="M16 16h.01"></path></svg>
+                    <div class="bg-white dark:bg-slate-800/40 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
+                        <label for="scenario-select" class="block text-[10px] uppercase font-bold text-gray-500 dark:text-slate-400 mb-2 tracking-widest">Escenario de Accidente / Riesgo:</label>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="scenario-select" onchange="saveStateToHistory()" class="block w-full flex-1 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 focus:border-blue-500 outline-none p-3 text-sm rounded-xl text-gray-900 dark:text-slate-200 font-semibold transition-colors"></select>
+                            <button id="random-scenario-btn" title="Escenario aleatorio" class="flex-shrink-0 p-3 rounded-xl bg-gray-100 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 hover:bg-gray-200 dark:hover:bg-slate-700 hover:border-blue-500 transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600 dark:text-blue-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M16 8h.01"></path><path d="M12 12h.01"></path><path d="M8 16h.01"></path><path d="M8 8h.01"></path><path d="M16 16h.01"></path></svg>
                             </button>
                         </div>
                     </div>
 
-                    <div id="interactive-matrix-container" class="relative bg-slate-800/40 p-6 rounded-2xl border border-slate-700 shadow-xl">
-                        <div class="flex justify-between items-start gap-2 mb-4">
-                            <h3 class="text-sm font-bold text-slate-300 uppercase tracking-widest text-center flex-grow">Matriz Evaluativa de Riesgos</h3>
+                    <div class="relative bg-white dark:bg-slate-800/40 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-xl overflow-x-auto">
+                        <div class="flex justify-between items-start gap-2 mb-4 min-w-[500px]">
+                            <h3 class="text-sm font-bold text-gray-800 dark:text-slate-300 uppercase tracking-widest text-center flex-grow">Matriz Evaluativa de Riesgos</h3>
                             <button onclick="copyMatrixToWord()" class="text-[10px] bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20 no-print flex-shrink-0">Copiar a Word</button>
                         </div>
-                        <div class="interactive-matrix-grid shadow-inner">
-                            <div class="matrix-cell col-span-2"></div>
-                            <div class="matrix-cell matrix-header col-span-3 text-[10px] font-bold uppercase tracking-widest">SEVERIDAD / CONSECUENCIAS</div>
+                        <div id="interactive-matrix-container" class="relative min-w-[500px]">
+                            <div class="interactive-matrix-grid shadow-inner">
+                                <div class="matrix-cell col-span-2"></div>
+                                <div class="matrix-cell matrix-header col-span-3 text-[10px] font-bold uppercase tracking-widest">SEVERIDAD / CONSECUENCIAS</div>
 
-                            <div class="matrix-cell"></div>
-                            <div class="matrix-cell"></div>
-                            <div class="matrix-cell matrix-header text-xs">Lig. Dañino</div>
-                            <div class="matrix-cell matrix-header text-xs">Dañino</div>
-                            <div class="matrix-cell matrix-header text-xs leading-tight">Ext. Dañino</div>
-                            
-                            <div class="matrix-cell matrix-header prob-header row-span-3 text-[10px] font-bold uppercase tracking-widest" style="writing-mode: vertical-rl; transform: rotate(180deg);">PROBABILIDAD</div>
-                            <div class="matrix-cell matrix-header text-xs">Alta</div>
-                            <div class="matrix-cell riesgo-moderado" data-prob="Alta" data-sev="Baja">Moderado</div>
-                            <div class="matrix-cell riesgo-alto" data-prob="Alta" data-sev="Media">Importante</div>
-                            <div class="matrix-cell riesgo-muy-alto" data-prob="Alta" data-sev="Alta">Intolerable</div>
+                                <div class="matrix-cell"></div>
+                                <div class="matrix-cell"></div>
+                                <div class="matrix-cell matrix-header text-xs">Lig. Dañino</div>
+                                <div class="matrix-cell matrix-header text-xs">Dañino</div>
+                                <div class="matrix-cell matrix-header text-xs leading-tight">Ext. Dañino</div>
+                                
+                                <div class="matrix-cell matrix-header prob-header row-span-3 text-[10px] font-bold uppercase tracking-widest" style="writing-mode: vertical-rl; transform: rotate(180deg);">PROBABILIDAD</div>
+                                <div class="matrix-cell matrix-header text-xs">Alta</div>
+                                <div class="matrix-cell riesgo-moderado" data-prob="Alta" data-sev="Baja">Moderado</div>
+                                <div class="matrix-cell riesgo-alto" data-prob="Alta" data-sev="Media">Importante</div>
+                                <div class="matrix-cell riesgo-muy-alto" data-prob="Alta" data-sev="Alta">Intolerable</div>
 
-                            <div class="matrix-cell matrix-header text-xs">Media</div>
-                            <div class="matrix-cell riesgo-tolerable" data-prob="Media" data-sev="Baja">Tolerable</div>
-                            <div class="matrix-cell riesgo-moderado" data-prob="Media" data-sev="Media">Moderado</div>
-                            <div class="matrix-cell riesgo-alto" data-prob="Media" data-sev="Alta">Importante</div>
+                                <div class="matrix-cell matrix-header text-xs">Media</div>
+                                <div class="matrix-cell riesgo-tolerable" data-prob="Media" data-sev="Baja">Tolerable</div>
+                                <div class="matrix-cell riesgo-moderado" data-prob="Media" data-sev="Media">Moderado</div>
+                                <div class="matrix-cell riesgo-alto" data-prob="Media" data-sev="Alta">Importante</div>
 
-                            <div class="matrix-cell matrix-header text-xs">Baja</div>
-                            <div class="matrix-cell riesgo-trivial" data-prob="Baja" data-sev="Baja">Trivial</div>
-                            <div class="matrix-cell riesgo-tolerable" data-prob="Baja" data-sev="Media">Tolerable</div>
-                            <div class="matrix-cell riesgo-moderado" data-prob="Baja" data-sev="Alta">Moderado</div>
+                                <div class="matrix-cell matrix-header text-xs">Baja</div>
+                                <div class="matrix-cell riesgo-trivial" data-prob="Baja" data-sev="Baja">Trivial</div>
+                                <div class="matrix-cell riesgo-tolerable" data-prob="Baja" data-sev="Media">Tolerable</div>
+                                <div class="matrix-cell riesgo-moderado" data-prob="Baja" data-sev="Alta">Moderado</div>
+                            </div>
+                            <svg id="risk-path-svg"></svg>
                         </div>
-                        <svg id="risk-path-svg"></svg>
                     </div>
                 </div>
 
-                <div id="scenario-details" class="p-6 rounded-2xl min-h-[400px] flex flex-col bg-slate-800/40 border border-slate-700 shadow-xl">
-                    <div class="flex justify-between items-start gap-4 mb-2">
-                        <h3 id="scenario-title" class="text-lg font-bold text-white">Seleccione un escenario</h3>
+                <div id="scenario-details" class="p-6 rounded-2xl min-h-[400px] flex flex-col bg-white dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700 shadow-xl">
+                    <div class="flex flex-wrap justify-between items-start gap-4 mb-2">
+                        <h3 id="scenario-title" class="text-lg font-bold text-gray-900 dark:text-white flex-1">Seleccione un escenario</h3>
                         <button onclick="copyToWord('scenario-details')" class="flex-shrink-0 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20 no-print">Copiar a Word</button>
                     </div>
-                    <p id="scenario-description" class="mb-6 flex-grow text-sm text-slate-400 leading-relaxed"></p>
+                    <p id="scenario-description" class="mb-6 flex-grow text-sm text-gray-600 dark:text-slate-400 leading-relaxed"></p>
                     
                     <div id="measures-container" class="mb-4"></div>
                     <div id="feedback-container" class="text-center my-2 text-sm font-medium"></div>
                     
-                    <div class="flex items-center gap-3 mt-4 no-print">
-                        <button id="solve-btn" class="w-full text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-300 bg-red-600 hover:bg-red-500 shadow-red-500/20 text-sm">Aplicar Medidas Óptimas</button>
-                        <button id="toggle-all-btn" class="w-auto flex-shrink-0 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-300 bg-slate-700 hover:bg-slate-600 border border-slate-600" title="Marcar/Desmarcar Todo">
+                    <div class="flex flex-wrap items-center gap-3 mt-4 no-print">
+                        <button id="solve-btn" class="flex-1 min-w-[200px] text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-300 bg-red-600 hover:bg-red-500 shadow-red-500/20 text-sm">Aplicar Medidas Óptimas</button>
+                        <button id="toggle-all-btn" class="w-auto flex-shrink-0 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-300 bg-gray-600 dark:bg-slate-700 hover:bg-gray-500 dark:hover:bg-slate-600 border border-gray-500 dark:border-slate-600" title="Marcar/Desmarcar Todo">
                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 22.56a1 1 0 0 0 .5-1.85 1 1 0 0 0-1.85-.5 1 1 0 0 0 .5 1.85 1 1 0 0 0 .85-.5zM16 22.56a1 1 0 0 0 .5-1.85 1 1 0 0 0-1.85-.5 1 1 0 0 0 .5 1.85 1 1 0 0 0 .85-.5zM9 12l2 2 4-4"/><path d="M20 6L9 17l-5-5"/></svg>
                         </button>
-                        <button id="reset-btn" class="hidden w-auto flex-shrink-0 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-300 bg-slate-800 hover:bg-slate-700 border border-slate-700" title="Reiniciar selección">
+                        <button id="reset-btn" class="hidden w-auto flex-shrink-0 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-300 bg-gray-800 dark:bg-slate-800 hover:bg-gray-700 dark:hover:bg-slate-700 border border-gray-700 dark:border-slate-700" title="Reiniciar selección">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                         </button>
                     </div>
@@ -1322,6 +1359,53 @@
         let historyIndex = -1;
         let isHistoryAction = false;
 
+        function toggleVisibility(id, btnElement) {
+            const el = document.getElementById(id);
+            const icon = btnElement.querySelector('svg') || btnElement.parentElement.querySelector('button svg');
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (icon) icon.parentElement.classList.remove('rotate-180');
+            } else {
+                el.classList.add('hidden');
+                if (icon) icon.parentElement.classList.add('rotate-180');
+            }
+        }
+        
+        function toggleTbody(id, btnElement) {
+            const el = document.getElementById(id);
+            const icon = btnElement.querySelector('.toggle-icon');
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (icon) icon.classList.remove('rotate-180');
+            } else {
+                el.classList.add('hidden');
+                if (icon) icon.classList.add('rotate-180');
+            }
+        }
+
+        function toggleAllThermalSections() {
+            const tbodies = ['thermal-opacos-body', 'thermal-huecos-body', 'thermal-ventilacion-body', 'thermal-ganancias-body'];
+            let anyVisible = false;
+            tbodies.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden')) anyVisible = true;
+            });
+            tbodies.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const headerRow = el.previousElementSibling;
+                    const icon = headerRow ? headerRow.querySelector('.toggle-icon') : null;
+                    if (anyVisible) {
+                        el.classList.add('hidden');
+                        if (icon) icon.classList.add('rotate-180');
+                    } else {
+                        el.classList.remove('hidden');
+                        if (icon) icon.classList.remove('rotate-180');
+                    }
+                }
+            });
+        }
+
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
             saveStateToHistory();
@@ -1412,6 +1496,34 @@
                 }
             });
             
+            // Reparar eventos de colapsables en Cargas Térmicas (para JSONs antiguos de alumnos)
+            document.querySelectorAll('#thermal-table tr').forEach(tr => {
+                const text = tr.innerText || '';
+                if (text.includes('1. Transmisión opacos')) {
+                    tr.setAttribute('onclick', "toggleTbody('thermal-opacos-body', this)");
+                    tr.classList.add('cursor-pointer');
+                } else if (text.includes('2. Transmisión semitransparentes')) {
+                    tr.setAttribute('onclick', "toggleTbody('thermal-huecos-body', this)");
+                    tr.classList.add('cursor-pointer');
+                } else if (text.includes('3. Ventilación e Infiltración')) {
+                    tr.setAttribute('onclick', "toggleTbody('thermal-ventilacion-body', this)");
+                    tr.classList.add('cursor-pointer');
+                } else if (text.includes('4. Ocupantes, Iluminación, Equipos')) {
+                    tr.setAttribute('onclick', "toggleTbody('thermal-ganancias-body', this)");
+                    tr.classList.add('cursor-pointer');
+                }
+            });
+
+            document.querySelectorAll('#thermal h3').forEach(h3 => {
+                if (h3.innerText.includes('Panel Didáctico')) {
+                    const headerDiv = h3.closest('.justify-between');
+                    if (headerDiv) {
+                        headerDiv.setAttribute('onclick', "toggleVisibility('thermal-panel-content', this)");
+                        headerDiv.classList.add('cursor-pointer');
+                    }
+                }
+            });
+
             calculateEnvolvente();
             calculateThermal();
             calculateIndustrialCold();
@@ -1420,12 +1532,21 @@
             if (typeof refreshPRLUI === 'function') refreshPRLUI();
         }
 
+        let historyDebounceTimer;
+        function debouncedSaveStateToHistory() {
+            clearTimeout(historyDebounceTimer);
+            historyDebounceTimer = setTimeout(saveStateToHistory, 500);
+        }
+
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('button');
-            if (btn && !btn.hasAttribute('data-no-history')) setTimeout(saveStateToHistory, 50);
+            if (btn && !btn.hasAttribute('data-no-history')) debouncedSaveStateToHistory();
+        });
+        document.addEventListener('input', (e) => {
+            if(['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) debouncedSaveStateToHistory();
         });
         document.addEventListener('change', (e) => {
-            if(['INPUT', 'SELECT'].includes(e.target.tagName)) setTimeout(saveStateToHistory, 50);
+            if(['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) debouncedSaveStateToHistory();
         });
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undoAction(); }
@@ -2069,7 +2190,6 @@
                 addGenericRow('check-body', 3);
             }
         }
-
         
         function resetGlossary() {
             const body = document.getElementById('glossary-body');
@@ -2234,9 +2354,23 @@
             });
             
             form.innerHTML = ''; form.appendChild(clone);
-            const range = document.createRange(); range.selectNode(form); window.getSelection().removeAllRanges(); window.getSelection().addRange(range);
-            try { document.execCommand('copy'); const t = document.getElementById('toast'); if(t) {t.innerText = '✓ Copiado al portapapeles'; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500);} } catch(e) {}
-            window.getSelection().removeAllRanges();
+            
+            if (navigator.clipboard && window.ClipboardItem) {
+                const htmlBlob = new Blob([form.innerHTML], { type: 'text/html' });
+                const textBlob = new Blob([form.innerText], { type: 'text/plain' });
+                const clipboardItem = new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                });
+                navigator.clipboard.write([clipboardItem]).then(() => {
+                    const t = document.getElementById('toast'); 
+                    if(t) {t.innerText = '✓ Copiado al portapapeles'; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500);}
+                }).catch(err => console.error('Error al copiar:', err));
+            } else {
+                const range = document.createRange(); range.selectNode(form); window.getSelection().removeAllRanges(); window.getSelection().addRange(range);
+                try { document.execCommand('copy'); const t = document.getElementById('toast'); if(t) {t.innerText = '✓ Copiado al portapapeles'; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500);} } catch(e) {}
+                window.getSelection().removeAllRanges();
+            }
         }
 
         // FUNCIÓN ESPECIAL: Traduce la Matriz CSS a una Tabla HTML pura para exportar a Word
@@ -2298,9 +2432,23 @@
             `;
 
             form.innerHTML = tableHtml;
-            const range = document.createRange(); range.selectNode(form); window.getSelection().removeAllRanges(); window.getSelection().addRange(range);
-            try { document.execCommand('copy'); const t = document.getElementById('toast'); if(t) {t.innerText = '✓ Matriz copiada al portapapeles'; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500);} } catch(e) {}
-            window.getSelection().removeAllRanges();
+            
+            if (navigator.clipboard && window.ClipboardItem) {
+                const htmlBlob = new Blob([form.innerHTML], { type: 'text/html' });
+                const textBlob = new Blob([form.innerText], { type: 'text/plain' });
+                const clipboardItem = new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                });
+                navigator.clipboard.write([clipboardItem]).then(() => {
+                    const t = document.getElementById('toast'); 
+                    if(t) {t.innerText = '✓ Matriz copiada al portapapeles'; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500);}
+                }).catch(err => console.error('Error al copiar matriz:', err));
+            } else {
+                const range = document.createRange(); range.selectNode(form); window.getSelection().removeAllRanges(); window.getSelection().addRange(range);
+                try { document.execCommand('copy'); const t = document.getElementById('toast'); if(t) {t.innerText = '✓ Matriz copiada al portapapeles'; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500);} } catch(e) {}
+                window.getSelection().removeAllRanges();
+            }
         }
 
         // --- SISTEMA PRL ---
