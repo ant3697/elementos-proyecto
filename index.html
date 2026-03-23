@@ -1499,18 +1499,44 @@
             // Reparar eventos de colapsables en Cargas Térmicas (para JSONs antiguos de alumnos)
             document.querySelectorAll('#thermal-table tr').forEach(tr => {
                 const text = tr.innerText || '';
-                if (text.includes('1. Transmisión opacos')) {
-                    tr.setAttribute('onclick', "toggleTbody('thermal-opacos-body', this)");
+                let targetId = null;
+                
+                if (text.includes('1. Transmisión opacos')) targetId = 'thermal-opacos-body';
+                else if (text.includes('2. Transmisión semitransparentes')) targetId = 'thermal-huecos-body';
+                else if (text.includes('3. Ventilación e Infiltración')) targetId = 'thermal-ventilacion-body';
+                else if (text.includes('4. Ocupantes, Iluminación, Equipos')) targetId = 'thermal-ganancias-body';
+
+                if (targetId) {
+                    tr.setAttribute('onclick', `toggleTbody('${targetId}', this)`);
                     tr.classList.add('cursor-pointer');
-                } else if (text.includes('2. Transmisión semitransparentes')) {
-                    tr.setAttribute('onclick', "toggleTbody('thermal-huecos-body', this)");
-                    tr.classList.add('cursor-pointer');
-                } else if (text.includes('3. Ventilación e Infiltración')) {
-                    tr.setAttribute('onclick', "toggleTbody('thermal-ventilacion-body', this)");
-                    tr.classList.add('cursor-pointer');
-                } else if (text.includes('4. Ocupantes, Iluminación, Equipos')) {
-                    tr.setAttribute('onclick', "toggleTbody('thermal-ganancias-body', this)");
-                    tr.classList.add('cursor-pointer');
+
+                    // Restaurar el chevrón si desapareció al cargar datos de versiones anteriores
+                    if (!tr.querySelector('.toggle-icon')) {
+                        const titleSpan = Array.from(tr.querySelectorAll('span')).find(s => s.innerText.trim().match(/^[1-4]\.\s/));
+                        if (titleSpan) {
+                            const iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>`;
+                            if (titleSpan.parentElement && titleSpan.parentElement.classList.contains('gap-2')) {
+                                titleSpan.insertAdjacentHTML('beforebegin', iconHtml);
+                            } else {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'flex items-center gap-2';
+                                titleSpan.parentNode.insertBefore(wrapper, titleSpan);
+                                wrapper.innerHTML = iconHtml;
+                                wrapper.appendChild(titleSpan);
+                            }
+                        }
+                    }
+
+                    // Sincronizar el estado de rotación del chevrón
+                    const tbody = document.getElementById(targetId);
+                    const icon = tr.querySelector('.toggle-icon');
+                    if (tbody && icon) {
+                        if (tbody.classList.contains('hidden')) {
+                            icon.classList.add('rotate-180');
+                        } else {
+                            icon.classList.remove('rotate-180');
+                        }
+                    }
                 }
             });
 
